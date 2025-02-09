@@ -23,7 +23,7 @@ async function readFromFile() {
 }
 
 async function listContacts() {
-  const contacts = readFromFile();
+  const contacts = await readFromFile();
   return [...contacts];
 }
 
