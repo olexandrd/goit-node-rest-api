@@ -1,14 +1,8 @@
 import { promises as fs } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { hexoid } from "hexoid";
+import { join } from "node:path";
+import { uid } from "uid";
 
-// Don't work if run from another directory
 const contactsPath = join(process.cwd(), "db", "contacts.json");
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-// const contactsPath = join(__dirname, "db", "contacts.json");
 
 async function listContacts() {
   try {
@@ -51,8 +45,7 @@ async function removeContact(contactId) {
 async function addContact(name, email, phone) {
   try {
     const contacts = await listContacts();
-    const id = hexoid();
-    const newContact = { id: id(), name, email, phone };
+    const newContact = { id: uid(), name, email, phone };
     contacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return newContact;
