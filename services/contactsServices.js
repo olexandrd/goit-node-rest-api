@@ -52,4 +52,27 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-export default { listContacts, getContactById, removeContact, addContact };
+async function updateContact(contactId, { ...data }) {
+  const contacts = await listContacts();
+  const idx = contacts.findIndex(({ id }) => id === contactId);
+  if (idx === -1) {
+    return null;
+  }
+  const updatedContact = { ...contacts[idx] };
+  for (const key in data) {
+    if (data[key] !== undefined) {
+      updatedContact[key] = data[key];
+    }
+  }
+  contacts[idx] = { ...updatedContact };
+  await writeToFile(contacts);
+  return updatedContact;
+}
+
+export default {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
