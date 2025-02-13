@@ -44,7 +44,7 @@ async function removeContact(contactId) {
   return contact;
 }
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const contacts = await listContacts();
   const newContact = { id: uid(), name, email, phone };
   contacts.push(newContact);
@@ -64,7 +64,7 @@ async function updateContact(contactId, { ...data }) {
       updatedContact[key] = data[key];
     }
   }
-  contacts[idx] = { ...updatedContact };
+  contacts[idx] = { ...contacts[idx], ...updatedContact };
   await writeToFile(contacts);
   return updatedContact;
 }

@@ -1,8 +1,5 @@
 import contactsService from "../services/contactsServices.js";
-import {
-  createContactSchema,
-  updateContactSchema,
-} from "../schemas/contactsSchemas.js";
+import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res) => {
   const contacts = await contactsService.listContacts();
@@ -14,7 +11,7 @@ export const getOneContact = async (req, res) => {
   if (contact) {
     res.json(contact);
   } else {
-    res.status(404).json({ message: "Not found" });
+    throw HttpError(404, `Contact with id ${req.params.id} Not found`);
   }
 };
 
@@ -23,24 +20,16 @@ export const deleteContact = async (req, res) => {
   if (contact) {
     res.json(contact);
   } else {
-    res.status(404).json({ message: "Not found" });
+    throw HttpError(404, `Contact with id ${req.params.id} Not found`);
   }
 };
 
 export const createContact = async (req, res) => {
-  const { error } = createContactSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.message });
-  }
   const newContact = await contactsService.addContact(req.body);
-  res.json(newContact);
+  res.status(201).json(newContact);
 };
 
 export const updateContact = async (req, res) => {
-  const { error } = updateContactSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.message });
-  }
   const updatedContact = await contactsService.updateContact(
     req.params.id,
     req.body
@@ -48,6 +37,6 @@ export const updateContact = async (req, res) => {
   if (updatedContact) {
     res.json(updatedContact);
   } else {
-    res.status(404).json({ message: "Not found" });
+    throw HttpError(404, `Contact with id ${req.params.id} Not found`);
   }
 };
