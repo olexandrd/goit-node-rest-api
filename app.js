@@ -23,5 +23,8 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(config.PORT, () => {
-  console.log(`Server is running. Use our API on port: ${config.PORT}`);
+  console.log(
+    `Server is running. Use our API on port: ${config.PORT}\
+    \nhttp://localhost:${config.PORT}`
+  );
 });
