@@ -27,4 +27,8 @@ export const Contact = sequelize.define("Contact", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  favorite: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });

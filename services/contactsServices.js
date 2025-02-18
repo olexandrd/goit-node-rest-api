@@ -40,10 +40,17 @@ async function updateContact(contactId, { ...data }) {
   return updatedContact.length ? updatedContact[0] : null;
 }
 
+async function updateStatusContact(contactId, { favorite }) {
+  await Contact.update({ favorite }, { where: { id: contactId } });
+  const updatedContact = await Contact.findAll({ where: { id: contactId } });
+  return updatedContact.length ? updatedContact[0] : null;
+}
+
 export default {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
