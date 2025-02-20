@@ -20,7 +20,7 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   const contact = await Contact.findAll({ where: { id: contactId } });
-  return contact || null;
+  return contact.length ? contact[0] : null;
 }
 
 async function removeContact(contactId) {
@@ -29,8 +29,8 @@ async function removeContact(contactId) {
   return contact.length ? contact[0] : null;
 }
 
-async function addContact({ name, email, phone }) {
-  const newContact = await Contact.create({ name, email, phone });
+async function addContact({ name, email, phone, favorite }) {
+  const newContact = await Contact.create({ name, email, phone, favorite });
   await newContact.save();
   return newContact.toJSON();
 }
