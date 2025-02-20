@@ -1,4 +1,4 @@
-import { Contact } from "../models/contacts.js";
+import { Contact } from "../models/Contact.js";
 import { sequelize } from "../config/db.js";
 
 sequelize
