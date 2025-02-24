@@ -1,17 +1,7 @@
 import { Contact } from "../models/Contact.js";
-import { sequelize } from "../config/db.js";
+// import { db_sync } from "../helpers/db_sync.js";
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Database connection successful.");
-    Contact.sync();
-    console.log("Contact modes was synchronized successfully.");
-  })
-  .catch((error) => {
-    console.log("Database connection failed.", error);
-    process.exit(1);
-  });
+// db_sync();
 
 async function listContacts() {
   const contacts = await Contact.findAll();
