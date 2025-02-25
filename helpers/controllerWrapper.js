@@ -6,8 +6,11 @@ const ctrlWrapper = (controller) => {
     try {
       await controller(req, res);
     } catch (error) {
-      if (error instanceof ValidationError) {
+      if (error.name === "SequelizeValidationError") {
         return next(HttpError(400, error.message));
+      }
+      if (error.name === "SequelizeUniqueConstraintError") {
+        return next(HttpError(409, error.message));
       }
       next(error);
     }
