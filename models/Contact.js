@@ -30,9 +30,6 @@ export const Contact = sequelize.define("Contact", {
   favorite: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-    validate: {
-      BOOLEAN: true,
-    },
   },
   owner: {
     type: DataTypes.INTEGER,

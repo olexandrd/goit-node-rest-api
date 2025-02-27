@@ -3,14 +3,19 @@ import { Contact } from "../models/Contact.js";
 
 // db_sync();
 
-async function listContacts() {
-  const contacts = await Contact.findAll();
+async function listContacts({ query }) {
+  const contacts = await Contact.findAll({ where: query });
   return [...contacts];
 }
 
 async function getContactById(contactId) {
   const contact = await Contact.findAll({ where: { id: contactId } });
   return contact.length ? contact[0] : null;
+}
+
+async function getContact({ id, owner }) {
+  const contact = await Contact.findOne({ where: { id, owner } });
+  return contact || null;
 }
 
 async function removeContact(contactId) {

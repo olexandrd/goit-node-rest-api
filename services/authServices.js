@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { User } from "../models/User.js";
 import HttpError from "../helpers/HttpError.js";
-import { generateToken } from "../helpers/generateToken.js";
+import { generateToken } from "../helpers/jwt.js";
 
 const register = async ({ email, password, subscription }) => {
   const existingUser = await User.findOne({ where: { email } });
@@ -31,7 +31,23 @@ const login = async ({ email, password }) => {
 
   user.token = token;
   await user.save();
-  return { token };
+  return {
+    token: token,
+    user: { email: user.email, subscription: user.subscription },
+  };
 };
 
-export default { register, login };
+const findUser = async (email) => {
+  return await User.findOne({ where: { email } });
+};
+
+const logout = async (id) => {
+  const user = await User.findByPk(id);
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
+  user.token = null;
+  await user.save();
+};
+
+export default { register, login, findUser, logout };

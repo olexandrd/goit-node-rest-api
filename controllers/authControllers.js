@@ -25,5 +25,17 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const result = await authServices.login(req.body);
-  res.json({ token: result });
+  res.json(result);
+};
+
+export const getCurrent = async (req, res) => {
+  res.json({
+    email: req.user.email,
+  });
+};
+
+export const logout = async (req, res) => {
+  const { id } = req.user.id;
+  await authServices.logout(id);
+  res.status(204).send();
 };
