@@ -7,7 +7,9 @@ export const getAllContacts = async (req, res) => {
     limit: req.query.limit,
     page: req.query.page,
   };
-
+  if (req.query.favorite) {
+    query.favorite = req.query.favorite;
+  }
   const contacts = await contactsService.listContacts({ owner }, pagination);
   res.json(contacts);
 };
