@@ -3,7 +3,12 @@ import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res) => {
   const { id: owner } = req.user;
-  const contacts = await contactsService.listContacts({ owner });
+  const pagination = {
+    limit: req.query.limit,
+    page: req.query.page,
+  };
+
+  const contacts = await contactsService.listContacts({ owner }, pagination);
   res.json(contacts);
 };
 

@@ -3,8 +3,10 @@ import { Contact } from "../models/Contact.js";
 
 // db_sync();
 
-async function listContacts(query) {
-  const contacts = await Contact.findAll({ where: query });
+async function listContacts(query, pagination) {
+  const { limit, page } = pagination;
+  const offset = (page - 1) * limit || 0;
+  const contacts = await Contact.findAll({ where: query, offset, limit });
   return [...contacts];
 }
 
