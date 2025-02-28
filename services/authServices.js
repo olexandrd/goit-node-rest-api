@@ -50,4 +50,14 @@ const logout = async (email) => {
   await user.save();
 };
 
-export default { register, login, findUser, logout };
+const subscription = async (email, { subscription }) => {
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
+  user.subscription = subscription;
+  await user.save();
+  return user;
+};
+
+export default { register, login, findUser, logout, subscription };

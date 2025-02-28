@@ -8,8 +8,13 @@ import {
   login,
   getCurrent,
   logout,
+  subscription,
 } from "../controllers/authControllers.js";
-import { loginSchema, registerSchema } from "../schemas/authSchemas.js";
+import {
+  loginSchema,
+  registerSchema,
+  subscriptionSchema,
+} from "../schemas/authSchemas.js";
 import { authenticate } from "../helpers/jwt.js";
 
 const authRouter = express.Router();
@@ -25,5 +30,12 @@ authRouter.post("/login", validateBody(loginSchema), ctrlWrapper(login));
 authRouter.get("/current", authenticate, ctrlWrapper(getCurrent));
 
 authRouter.post("/logout", authenticate, ctrlWrapper(logout));
+
+authRouter.patch(
+  "/subscription",
+  authenticate,
+  validateBody(subscriptionSchema),
+  ctrlWrapper(subscription)
+);
 
 export default authRouter;

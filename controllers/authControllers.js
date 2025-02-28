@@ -9,18 +9,6 @@ export const register = async (req, res, next) => {
       subscription: result.subscription,
     },
   });
-  //   try {
-  //     const { email, password, subscription } = req.body;
-  //     const user = await authServices.register({ email, password, subscription });
-  //     res.status(201).json({
-  //       user: {
-  //         email: user.email,
-  //         subscription: user.subscription,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     next(HttpError(400, error.message));
-  //   }
 };
 
 export const login = async (req, res, next) => {
@@ -39,4 +27,13 @@ export const logout = async (req, res) => {
   const { email } = req.user;
   await authServices.logout(email);
   res.status(204).send();
+};
+
+export const subscription = async (req, res) => {
+  const { email } = req.user;
+  const result = await authServices.subscription(email, req.body);
+  res.json({
+    email: result.email,
+    subscription: result.subscription,
+  });
 };
