@@ -41,8 +41,8 @@ const findUser = async (email) => {
   return await User.findOne({ where: { email } });
 };
 
-const logout = async (id) => {
-  const user = await User.findByPk(id);
+const logout = async (email) => {
+  const user = await User.findOne({ where: { email } });
   if (!user) {
     throw HttpError(401, "Not authorized");
   }

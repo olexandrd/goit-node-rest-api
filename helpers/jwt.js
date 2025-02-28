@@ -9,15 +9,6 @@ export const generateToken = async (payload) => {
   });
 };
 
-export const verifyToken = async (token) => {
-  try {
-    const result = jwt.verify(token, config.JWT_SECRET);
-    return result;
-  } catch (error) {
-    return null;
-  }
-};
-
 export const authenticate = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {

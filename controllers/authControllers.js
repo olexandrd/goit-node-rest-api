@@ -31,11 +31,12 @@ export const login = async (req, res, next) => {
 export const getCurrent = async (req, res) => {
   res.json({
     email: req.user.email,
+    subscription: req.user.subscription,
   });
 };
 
 export const logout = async (req, res) => {
-  const { id } = req.user.id;
-  await authServices.logout(id);
+  const { email } = req.user;
+  await authServices.logout(email);
   res.status(204).send();
 };
