@@ -15,3 +15,14 @@ export const db_sync = async () =>
       console.log("Database connection failed.", error);
       process.exit(1);
     });
+
+export const db_check = async () =>
+  sequelize
+    .authenticate()
+    .then(() => {
+      console.log("Database connection successful.");
+    })
+    .catch((error) => {
+      console.log("Database connection failed.", error);
+      process.exit(1);
+    });
