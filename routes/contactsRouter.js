@@ -9,6 +9,7 @@ import {
 } from "../controllers/contactsControllers.js";
 
 import ctrlWrapper from "../helpers/controllerWrapper.js";
+import { authenticate } from "../helpers/jwt.js";
 
 import {
   createContactSchema,
@@ -20,26 +21,29 @@ import validateBody from "../helpers/validateBody.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", ctrlWrapper(getAllContacts));
+contactsRouter.get("/", authenticate, ctrlWrapper(getAllContacts));
 
-contactsRouter.get("/:id", ctrlWrapper(getOneContact));
+contactsRouter.get("/:id", authenticate, ctrlWrapper(getOneContact));
 
-contactsRouter.delete("/:id", ctrlWrapper(deleteContact));
+contactsRouter.delete("/:id", authenticate, ctrlWrapper(deleteContact));
 
 contactsRouter.post(
   "/",
+  authenticate,
   validateBody(createContactSchema),
   ctrlWrapper(createContact)
 );
 
 contactsRouter.put(
   "/:id",
+  authenticate,
   validateBody(updateContactSchema),
   ctrlWrapper(updateContact)
 );
 
 contactsRouter.patch(
   "/:id/favorite",
+  authenticate,
   validateBody(updateContactFavoriteSchema),
   ctrlWrapper(updateStatusContact)
 );
