@@ -1,4 +1,3 @@
-import HttpError from "../helpers/HttpError.js";
 import authServices from "../services/authServices.js";
 
 export const register = async (req, res, next) => {
@@ -35,5 +34,13 @@ export const subscription = async (req, res) => {
   res.json({
     email: result.email,
     subscription: result.subscription,
+  });
+};
+
+export const updateAvatar = async (req, res) => {
+  const { email } = req.user;
+  const result = await authServices.updateAvatar(email, req.file);
+  res.json({
+    avatarURL: result.avatarURL,
   });
 };

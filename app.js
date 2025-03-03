@@ -28,9 +28,9 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(config.PORT, () => {
+app.listen(config.PORT, config.DOMAIN, () => {
   console.log(
     `Server is running. Use our API on port: ${config.PORT}\
-    \nhttp://localhost:${config.PORT}`
+    \nhttp://${config.DOMAIN}:${config.PORT}`
   );
 });

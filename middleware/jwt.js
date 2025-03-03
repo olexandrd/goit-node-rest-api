@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
-import HttpError from "./HttpError.js";
+import HttpError from "../helpers/HttpError.js";
 import authServices from "../services/authServices.js";
 
 export const generateToken = async (payload) => {
