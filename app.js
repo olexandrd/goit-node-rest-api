@@ -5,9 +5,9 @@ import cors from "cors";
 import config from "./config/config.js";
 import contactsRouter from "./routes/contactsRouter.js";
 import authRouter from "./routes/authRouter.js";
-import { db_check } from "./helpers/db_sync.js";
+import { db_connection_check } from "./helpers/db_sync.js";
 
-db_check();
+db_connection_check();
 
 const app = express();
 
