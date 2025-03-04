@@ -17,7 +17,7 @@ import {
   subscriptionSchema,
 } from "../schemas/authSchemas.js";
 import { authenticate } from "../middleware/jwt.js";
-import { upload, uploadMiddleware } from "../middleware/storage.js";
+import { upload } from "../middleware/storage.js";
 
 const authRouter = express.Router();
 
@@ -43,8 +43,7 @@ authRouter.patch(
 authRouter.patch(
   "/avatar",
   authenticate,
-  upload.single("file"),
-  uploadMiddleware,
+  upload.single("avatar"),
   ctrlWrapper(updateAvatar)
 );
 
