@@ -16,7 +16,7 @@ export const db_sync = async () =>
       process.exit(1);
     });
 
-export const db_check = async () =>
+export const db_connection_check = async () =>
   sequelize
     .authenticate()
     .then(() => {
