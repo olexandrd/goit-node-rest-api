@@ -59,24 +59,20 @@ export const updateAvatar = async (req, res) => {
   const fileName = `${emailString}-${Math.round(
     Math.random() * 1e9
   )}${extension}`;
-  if (config.AVATARS_LOCATION === "s3") {
-    try {
-      const result = await s3_upload(req, tempPath, fileName);
-      req.file.avatarURL = result;
+
+  try {
+    if (config.AVATARS_LOCATION === "s3") {
+      const s3Link = await s3_upload(req, tempPath, fileName);
+      req.file.avatarURL = s3Link;
       await fs.unlink(tempPath);
-    } catch (error) {
-      await fs.unlink(tempPath);
-      throw HttpError(500, error.message);
-    }
-  } else {
-    const finalPath = path.join(storeImage, fileName);
-    try {
+    } else {
+      const finalPath = path.join(storeImage, fileName);
       await fs.rename(tempPath, finalPath);
       req.file.avatarURI = `${avatarDir}/${fileName}`;
-    } catch (error) {
-      await fs.unlink(tempPath);
-      throw HttpError(500, error.message);
     }
+  } catch (error) {
+    await fs.unlink(tempPath);
+    throw HttpError(500, error.message);
   }
 
   const result = await authServices.updateAvatar(email, req.file);
