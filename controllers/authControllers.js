@@ -1,6 +1,9 @@
 import path from "path";
 import fs from "fs/promises";
 import authServices from "../services/authServices.js";
+import config from "../config/config.js";
+import s3_upload from "../helpers/s3_uploader.js";
+import HttpError from "../helpers/HttpError.js";
 
 const uploadDir = path.join(process.cwd(), "temp");
 const avatarDir = "avatars";
@@ -56,14 +59,21 @@ export const updateAvatar = async (req, res) => {
   const fileName = `${emailString}-${Math.round(
     Math.random() * 1e9
   )}${extension}`;
-  const finalPath = path.join(storeImage, fileName);
+
   try {
-    await fs.rename(tempPath, finalPath);
+    if (config.AVATARS_LOCATION === "s3") {
+      const s3Link = await s3_upload(req, tempPath, fileName);
+      req.file.avatarURL = s3Link;
+      await fs.unlink(tempPath);
+    } else {
+      const finalPath = path.join(storeImage, fileName);
+      await fs.rename(tempPath, finalPath);
+      req.file.avatarURI = `${avatarDir}/${fileName}`;
+    }
   } catch (error) {
     await fs.unlink(tempPath);
-    return next(error);
+    throw HttpError(500, error.message);
   }
-  req.file.avatarURI = `${avatarDir}/${fileName}`;
 
   const result = await authServices.updateAvatar(email, req.file);
   res.json({
