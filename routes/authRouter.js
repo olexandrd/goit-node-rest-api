@@ -47,4 +47,6 @@ authRouter.patch(
   ctrlWrapper(updateAvatar)
 );
 
+authRouter.get("/auth/verify/:verificationToken");
+authRouter.post("/auth/verify");
 export default authRouter;
