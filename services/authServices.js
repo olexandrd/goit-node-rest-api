@@ -28,6 +28,9 @@ const login = async ({ email, password }) => {
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw HttpError(401, "Email or password is wrong");
   }
+  if (!user.verify) {
+    throw HttpError(403, "Email not verified");
+  }
   const payload = {
     id: user.id,
     email: user.email,
@@ -76,6 +79,17 @@ const updateAvatar = async (email, { avatarURI: avatarURI }) => {
   return user;
 };
 
+const verifyEmail = async (verificationToken) => {
+  const user = await User.findOne({ where: { verificationToken } });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  user.verificationToken = null;
+  user.verify = true;
+  await user.save();
+  return user;
+};
+
 export default {
   register,
   login,
@@ -83,4 +97,5 @@ export default {
   logout,
   subscription,
   updateAvatar,
+  verifyEmail,
 };

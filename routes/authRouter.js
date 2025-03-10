@@ -10,8 +10,10 @@ import {
   logout,
   subscription,
   updateAvatar,
+  verifyEmail,
 } from "../controllers/authControllers.js";
 import {
+  emailVerificationSchema,
   loginSchema,
   registerSchema,
   subscriptionSchema,
@@ -28,6 +30,10 @@ authRouter.post(
 );
 
 authRouter.post("/login", validateBody(loginSchema), ctrlWrapper(login));
+
+authRouter.get("/verify/:verificationToken", ctrlWrapper(verifyEmail));
+
+authRouter.post("/verify", validateBody(emailVerificationSchema));
 
 authRouter.get("/current", authenticate, ctrlWrapper(getCurrent));
 
@@ -47,6 +53,4 @@ authRouter.patch(
   ctrlWrapper(updateAvatar)
 );
 
-authRouter.get("/auth/verify/:verificationToken");
-authRouter.post("/auth/verify");
 export default authRouter;

@@ -41,3 +41,5 @@ export const User = sequelize.define("User", {
     type: DataTypes.STRING,
   },
 });
+
+User.sync({ alter: true });

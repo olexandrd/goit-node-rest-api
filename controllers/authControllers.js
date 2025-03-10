@@ -70,3 +70,9 @@ export const updateAvatar = async (req, res) => {
     avatarURL: result.avatarURL,
   });
 };
+
+export const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await authServices.verifyEmail(verificationToken);
+  res.status(200).send({ message: "Verification successful" });
+};

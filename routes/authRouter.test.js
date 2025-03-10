@@ -13,7 +13,19 @@ describe("Test login route", () => {
     await User.sync();
     await request(app).post("/api/auth/register").send(loginData);
   });
+  it("Unverified email login", async () => {
+    const { status, body } = await request(app)
+      .post("/api/auth/login")
+      .send({ ...loginData, email: "test@example.com" });
+    expect(status).toEqual(403);
+    expect(body.message).toBeDefined();
+    expect(body.message).toMatch(/Email not verified/);
+  });
   it("Successful login", async () => {
+    await User.update(
+      { verify: true, verificationToken: null },
+      { where: { email: loginData.email } }
+    );
     const { status, body } = await request(app)
       .post("/api/auth/login")
       .send(loginData);
