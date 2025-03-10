@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 import gravatar from "gravatar";
 import { User } from "../models/User.js";
 import HttpError from "../helpers/HttpError.js";
@@ -17,6 +18,7 @@ const register = async ({ email, password, subscription }) => {
     password: hashedPassword,
     subscription,
     avatarURL,
+    verificationToken: uuidv4(),
   });
   return user;
 };
