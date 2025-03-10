@@ -64,12 +64,16 @@ const subscription = async (email, { subscription }) => {
   return user;
 };
 
-const updateAvatar = async (email, { avatarURI: avatarURI }) => {
+const updateAvatar = async (email, { avatarURI, avatarURL }) => {
   const user = await User.findOne({ where: { email } });
   if (!user) {
     throw HttpError(401, "Not authorized");
   }
-  user.avatarURL = `http://${config.DOMAIN}:${config.PORT}/${avatarURI}`;
+  if (avatarURI && !avatarURL) {
+    user.avatarURL = `http://${config.DOMAIN}:${config.PORT}/${avatarURI}`;
+  } else if (avatarURL) {
+    user.avatarURL = avatarURL;
+  }
   await user.save();
   return user;
 };
