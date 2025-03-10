@@ -32,8 +32,5 @@ export const User = sequelize.define("User", {
   avatarURL: {
     type: DataTypes.STRING,
     defaultValue: null,
-    validate: {
-      isUrl: true,
-    },
   },
 });
