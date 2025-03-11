@@ -83,7 +83,7 @@ const updateAvatar = async (email, { avatarURI: avatarURI }) => {
 const verifyEmail = async (verificationToken) => {
   const user = await User.findOne({ where: { verificationToken } });
   if (!user) {
-    throw HttpError(404, "User not found");
+    throw HttpError(404, "User or token not found");
   }
   user.verificationToken = null;
   user.verify = true;
