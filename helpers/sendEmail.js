@@ -11,7 +11,7 @@ const sendEmail = async (data) => {
 
   await transporter
     .sendMail(mailOptions)
-    .then(() => console.log(`Email sent to ${email}`))
+    .then(() => console.log(`Email sent to ${mailOptions.to}`))
     .catch((err) => console.log(err));
 };
 
