@@ -1,17 +1,20 @@
 import path from "path";
 import fs from "fs/promises";
 import authServices from "../services/authServices.js";
+import HttpError from "../helpers/HttpError.js";
 
 const uploadDir = path.join(process.cwd(), "temp");
 const avatarDir = "avatars";
 const storeImage = path.join(process.cwd(), "public", avatarDir);
 
 export const register = async (req, res, next) => {
-  const result = await authServices.register(req.body);
+  const user = await authServices.register(req.body);
+  const { verificationToken } = user;
+  await authServices.sendVerificationEmail(user.email, verificationToken);
   res.status(201).json({
     user: {
-      email: result.email,
-      subscription: result.subscription,
+      email: user.email,
+      subscription: user.subscription,
     },
   });
 };
@@ -73,6 +76,19 @@ export const updateAvatar = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  const user = await authServices.verifyEmail(verificationToken);
+  await authServices.verifyEmail(verificationToken);
   res.status(200).send({ message: "Verification successful" });
+};
+
+export const repeatEmailVerification = async (req, res) => {
+  const { email } = req.body;
+  const user = await authServices.findUser({ email });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+  await authServices.sendVerificationEmail(user.email, user.verificationToken);
+  res.status(200).send({ message: "Verification email sent" });
 };

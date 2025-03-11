@@ -7,7 +7,7 @@ const config = {
   PORT: process.env.PORT || 3000,
   DB_URI: process.env.POSTGRES_URI,
   nodemailer: {
-    host: process.env.NODEMAILER_HOST || "",
+    host: process.env.NODEMAILER_HOST || "smtp.ukr.net",
     port: process.env.NODEMAILER_PORT || 465,
     secure: true,
     auth: {

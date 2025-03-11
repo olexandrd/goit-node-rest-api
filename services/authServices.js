@@ -5,6 +5,7 @@ import { User } from "../models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { generateToken } from "../middleware/jwt.js";
 import config from "../config/config.js";
+import sendEmail from "../helpers/sendEmail.js";
 
 const register = async ({ email, password, subscription }) => {
   const existingUser = await User.findOne({ where: { email } });
@@ -46,8 +47,8 @@ const login = async ({ email, password }) => {
   };
 };
 
-const findUser = async (email) => {
-  return await User.findOne({ where: { email } });
+const findUser = async (queue) => {
+  return await User.findOne({ where: { ...queue } });
 };
 
 const logout = async (email) => {
@@ -90,6 +91,18 @@ const verifyEmail = async (verificationToken) => {
   return user;
 };
 
+const sendVerificationEmail = async (email, verificationToken) => {
+  const user = await User.findOne({ where: { email } });
+  const emailData = {
+    subject: "Email verification",
+    to: email,
+    html: `<h1>Hello from ${config.DOMAIN}!</h1>
+    <p>Please verify your email: <a href="http://${config.DOMAIN}:${config.PORT}/api/auth/verify/${verificationToken}">Verify</a></p>`,
+  };
+
+  await sendEmail(emailData);
+};
+
 export default {
   register,
   login,
@@ -98,4 +111,5 @@ export default {
   subscription,
   updateAvatar,
   verifyEmail,
+  sendVerificationEmail,
 };
