@@ -21,7 +21,7 @@ export const authenticate = async (req, res, next) => {
 
   try {
     const { email } = jwt.verify(token, config.JWT_SECRET);
-    const user = await authServices.findUser(email);
+    const user = await authServices.findUser({ email });
     if (!user || user.token !== token) {
       return next(HttpError(401, "Not authorized"));
     }
