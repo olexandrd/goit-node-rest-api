@@ -100,7 +100,12 @@ const sendVerificationEmail = async (email, verificationToken) => {
     <p>Please verify your email: <a href="http://${config.DOMAIN}:${config.PORT}/api/auth/verify/${verificationToken}">Verify</a></p>`,
   };
 
-  await sendEmail(emailData);
+  await sendEmail(emailData)
+    .then(() => console.log(`Email sent to ${emailData.to}`))
+    .catch((error) => {
+      console.error(`Error during sending email, ${error}`);
+      throw HttpError(500, `Error during sending email`);
+    });
 };
 
 export default {

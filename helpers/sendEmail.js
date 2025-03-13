@@ -9,10 +9,7 @@ const sendEmail = async (data) => {
     from: config.nodemailer.auth.user,
   };
 
-  await transporter
-    .sendMail(mailOptions)
-    .then(() => console.log(`Email sent to ${mailOptions.to}`))
-    .catch((err) => console.log(err));
+  await transporter.sendMail(mailOptions);
 };
 
 export default sendEmail;
